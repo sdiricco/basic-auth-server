@@ -4,7 +4,8 @@ import { InfoService } from '../services/infoService';
 export class InfoController {
   public static async create(req: Request, res: Response): Promise<Response> {
     try {
-      const info = await InfoService.createInfo(req.body);
+      const userId = req.params.userId;
+      const info = await InfoService.createInfo({ ...req.body, userId });
       return res.status(201).json(info);
     } catch (error) {
       return res.status(500).json({ message: 'Error creating info', error });
@@ -13,7 +14,8 @@ export class InfoController {
 
   public static async get(req: Request, res: Response): Promise<Response> {
     try {
-      const info = await InfoService.getInfoById(req.params.id);
+      const { userId, infoId } = req.params;
+      const info = await InfoService.getInfoByIdAndUser(infoId, userId);
       if (!info) {
         return res.status(404).json({ message: 'Info not found' });
       }
@@ -25,7 +27,8 @@ export class InfoController {
 
   public static async getAll(req: Request, res: Response): Promise<Response> {
     try {
-      const infos = await InfoService.getAllInfo();
+      const userId = req.params.userId;
+      const infos = await InfoService.getAllInfoByUser(userId);
       return res.status(200).json(infos);
     } catch (error) {
       return res.status(500).json({ message: 'Error fetching infos', error });
@@ -34,7 +37,8 @@ export class InfoController {
 
   public static async update(req: Request, res: Response): Promise<Response> {
     try {
-      const info = await InfoService.updateInfo(req.params.id, req.body);
+      const { userId, infoId } = req.params;
+      const info = await InfoService.updateInfoByUser(infoId, userId, req.body);
       if (!info) {
         return res.status(404).json({ message: 'Info not found' });
       }
@@ -46,7 +50,8 @@ export class InfoController {
 
   public static async delete(req: Request, res: Response): Promise<Response> {
     try {
-      const info = await InfoService.deleteInfo(req.params.id);
+      const { userId, infoId } = req.params;
+      const info = await InfoService.deleteInfoByUser(infoId, userId);
       if (!info) {
         return res.status(404).json({ message: 'Info not found' });
       }

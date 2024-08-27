@@ -6,19 +6,19 @@ export class InfoService {
     return await info.save();
   }
 
-  public static async getInfoById(id: string): Promise<IInfo | null> {
-    return await Info.findById(id).populate('userId');
+  public static async getInfoByIdAndUser(infoId: string, userId: string): Promise<IInfo | null> {
+    return await Info.findOne({ _id: infoId, userId });
   }
 
-  public static async getAllInfo(): Promise<IInfo[]> {
-    return await Info.find().populate('userId');
+  public static async getAllInfoByUser(userId: string): Promise<IInfo[]> {
+    return await Info.find({ userId });
   }
 
-  public static async updateInfo(id: string, data: Partial<IInfo>): Promise<IInfo | null> {
-    return await Info.findByIdAndUpdate(id, data, { new: true }).populate('userId');
+  public static async updateInfoByUser(infoId: string, userId: string, data: Partial<IInfo>): Promise<IInfo | null> {
+    return await Info.findOneAndUpdate({ _id: infoId, userId }, data, { new: true });
   }
 
-  public static async deleteInfo(id: string): Promise<IInfo | null> {
-    return await Info.findByIdAndDelete(id);
+  public static async deleteInfoByUser(infoId: string, userId: string): Promise<IInfo | null> {
+    return await Info.findOneAndDelete({ _id: infoId, userId });
   }
 }
