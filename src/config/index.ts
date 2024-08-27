@@ -7,5 +7,8 @@ export const config = {
   auth: {
     username: process.env.BASIC_AUTH_USERNAME || 'admin',
     password: process.env.BASIC_AUTH_PASSWORD || 'password'
+  },
+  db: {
+    uri: process.env.MONGO_URI
   }
 };

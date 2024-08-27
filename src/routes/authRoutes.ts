@@ -4,6 +4,10 @@ import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.get('/protected', authMiddleware, AuthController.getProtectedResource);
+//User Registration api 
+router.post('/register', authMiddleware, AuthController.register);
+
+//User Login api
+router.post('/login', authMiddleware, AuthController.login);
 
 export default router;
