@@ -12,17 +12,20 @@ export class AuthController {
   public static async register(req: Request, res: Response): Promise<Response> {
     const { username, password } = req.body;
 
+    // Validate the request body
     if (!username || !password) {
-      return res.status(400).json({ message: 'Username and password are required' });
+      return res.status(400).json({ success: false, message: 'Username and password are required' });
     }
 
-    const result = await AuthService.loginUser(username, password);
-    if (result.success) {
-      return res.status(400).json({ message: 'Username already exists' });
+    // Check if the user already exists
+    const userAlreadyExists = await AuthService.checkUserExists(username);
+    if (userAlreadyExists) {
+      return res.status(400).json({ success: false, message: 'Username already exists' });
     }
 
-    const user = await AuthService.registerUser(username, password);
-    return res.status(201).json({ message: 'User registered successfully', user });
+    // Register the user
+    await AuthService.registerUser(username, password);
+    return res.status(201).json({ success: true, message: 'User registered successfully'});
   }
 
   
@@ -36,11 +39,23 @@ export class AuthController {
   public static async login(req: Request, res: Response): Promise<Response> {
     const { username, password } = req.body;
 
-    const result = await AuthService.loginUser(username, password);
-    if (!result.success) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    // Validate the request body
+    if (!username || !password) {
+      return res.status(400).json({ success: false, message: 'Username and password are required' });
     }
 
-    return res.status(200).json({ message: 'Login successful', user: result.user });
+    // Authenticate the user
+    const result = await AuthService.loginUser(username, password);
+
+    // Check if the authentication was successful
+    if (!result.success) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token
+    const token = AuthService.generarateToken(result.user);
+
+    // Return the token
+    return res.status(200).json({ success: true, message: 'Login successful', token });
   }
 }
