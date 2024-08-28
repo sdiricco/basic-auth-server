@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import {config} from "./config";
 import authRoutes from './routes/authRoutes';
-import infoRoutes from './routes/infoRoutes';
+import todoRoutes from './routes/todoRoutes';
 
 
 const app = express();
@@ -13,8 +13,8 @@ app.use(cors())
 app.use(express.json());
 // Rotte per l'autenticazione
 app.use('/api', authRoutes);
-// Rotte per la gestione delle info
-app.use('/api', infoRoutes);
+// Rotte per la gestione dei todo
+app.use('/api', todoRoutes);
 
 // Connessione a MongoDB
 mongoose.connect(config.db.uri || '').then(() => {

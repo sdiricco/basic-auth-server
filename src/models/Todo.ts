@@ -1,15 +1,15 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IInfo extends Document {
+export interface ITodo extends Document {
   userId: mongoose.Schema.Types.ObjectId;
   title: string;
   content: string;
 }
 
-const InfoSchema: Schema = new Schema({
+const ITodoSchema: Schema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   title: { type: String, required: true },
   content: { type: String, required: true },
-}, { collection: 'info' });  // Specifica il nome della collection
+}, { collection: 'todo' }); 
 
-export const Info = mongoose.model<IInfo>('Info', InfoSchema);
+export const Todo = mongoose.model<ITodo>('Todo', ITodoSchema);
