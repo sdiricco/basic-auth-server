@@ -9,8 +9,13 @@ import todoRoutes from './routes/todoRoutes';
 const app = express();
 
 // Middleware e rotte
-app.use(cors())
-app.options('*', cors()); 
+app.use(cors({
+    origin: '*', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], 
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+}));
 app.use(express.json());
 
 // Rotte per l'autenticazione
