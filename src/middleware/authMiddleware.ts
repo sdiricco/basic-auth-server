@@ -1,14 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import basicAuth from 'basic-auth';
+import jwt from 'jsonwebtoken';
 import { config } from '../config';
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const user = basicAuth(req);
-
-  if (!user || user.name !== config.auth.username || user.pass !== config.auth.password) {
-    res.set('WWW-Authenticate', 'Basic realm="example"');
-    return res.status(401).send('Access denied');
+  const token = req.header('Authorization')?.split(' ')[1];
+    
+  if (!token) {
+      return res.status(401).send('Access denied');
   }
 
-  next();
+  try {
+      jwt.verify(token, config.auth.jwt.secretKey);
+      next();
+  } catch (err) {
+      res.status(400).send('Invalid token');
+  }
 };

@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/authController';
-import { authMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
 //User Registration api 
-router.post('/register', authMiddleware, AuthController.register);
+router.post('/register', AuthController.register);
 
 //User Login api
-router.post('/login', authMiddleware, AuthController.login);
+router.post('/login', AuthController.login);
 
 export default router;
