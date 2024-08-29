@@ -10,7 +10,9 @@ const app = express();
 
 // Middleware e rotte
 app.use(cors())
+app.options('*', cors()); 
 app.use(express.json());
+
 // Rotte per l'autenticazione
 app.use('/api', authRoutes);
 // Rotte per la gestione dei todo
